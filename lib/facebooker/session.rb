@@ -472,20 +472,6 @@ module Facebooker
       @tags = post('facebook.photos.addTag', :pid => pid, :tag_uid => tag_uid, :tag_text => tag_text, :x => x, :y => y )
     end
 
-    def send_notification(user_ids, fbml, email_fbml = nil)
-      params = {:notification => fbml, :to_ids => user_ids.map{ |id| User.cast_to_facebook_id(id)}.join(',')}
-      if email_fbml
-        params[:email] = email_fbml
-      end
-      params[:type]="user_to_user"
-      # if there is no uid, this is an announcement
-      unless uid?
-        params[:type]="app_to_user"
-      end
-
-      post 'facebook.notifications.send', params,uid?
-    end 
-
     ##
     # Register a template bundle with Facebook.
     # returns the template id to use to send using this template

@@ -207,7 +207,6 @@ end
 
 require 'facebooker/attachment'
 require 'facebooker/batch_request'
-require 'facebooker/feed'
 require 'facebooker/logging'
 require 'facebooker/model'
 require 'facebooker/parser'

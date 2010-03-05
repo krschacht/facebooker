@@ -233,39 +233,6 @@ class Facebooker::Rails::Publisher::PublisherTest < Test::Unit::TestCase
     super
   end
 
-  def test_create_action
-    action=TestPublisher.create_action(@user)
-    assert_equal Facebooker::Feed::Action,action.class
-    assert_equal "Action Title",action.title
-  end
-
-  def test_deliver_action
-    @user.expects(:publish_action)
-    TestPublisher.deliver_action(@user)
-  end
-
-  def test_create_story
-    action=TestPublisher.create_story(@user)
-    assert_equal Facebooker::Feed::Story,action.class
-    assert_equal "Story Title",action.title
-  end
-
-  def test_deliver_story
-    @user.expects(:publish_story)
-    TestPublisher.deliver_story(@user)
-  end
-
-  def test_create_notification
-    notification=TestPublisher.create_notification(12451752,@user)
-    assert_equal Facebooker::Rails::Publisher::Notification,notification.class
-    assert_equal "Not",notification.fbml
-  end
-
-  def test_deliver_notification
-    @session.expects(:send_notification)
-    TestPublisher.deliver_notification("12451752",@user)
-  end
-
   def test_create_email
     email=TestPublisher.create_email("12451752",@user)
     assert_equal Facebooker::Rails::Publisher::Email,email.class
@@ -279,19 +246,6 @@ class Facebooker::Rails::Publisher::PublisherTest < Test::Unit::TestCase
     TestPublisher.deliver_email("12451752",@user)
   end
 
-  def test_create_templatized_action
-    ta=TestPublisher.create_templatized_action(@user)
-    assert_equal Facebooker::Feed::TemplatizedAction,ta.class
-    assert_equal "Templatized Action Title",ta.title_template
-
-  end
-
-
-
-  def test_deliver_templatized_action
-    @user.expects(:publish_action)
-    TestPublisher.deliver_templatized_action(@user)
-  end
   def test_create_profile_update
     p=TestPublisher.create_profile_update(@user,@user)
     assert_equal Facebooker::Rails::Publisher::Profile,p.class

@@ -68,6 +68,13 @@ class TestFacebooker < Test::Unit::TestCase
     assert_equal(8055, @session.user.id)
   end
 
+  def test_can_get_notifications_for_logged_in_user
+    expect_http_posts_with_responses(example_notifications_get_xml)
+    assert_equal("1", @session.user.notifications.messages.unread)
+    assert_equal("0", @session.user.notifications.pokes.unread)
+    assert_equal("1", @session.user.notifications.shares.unread)
+  end
+
   def test_can_get_current_users_friends
     expect_http_posts_with_responses(example_friends_xml)
     assert_equal([222333, 1240079], @session.user.friends.map{|friend| friend.id})
@@ -120,69 +127,9 @@ class TestFacebooker < Test::Unit::TestCase
     }
   end
 
-
-  def test_can_publish_story_to_users_feed
-    expect_http_posts_with_responses(example_publish_story_xml)
-    assert_nothing_raised {
-      assert(@session.user.publish_story((s = Facebooker::Feed::Story.new; s.title = 'o hai'; s.body = '4srsly'; s)))
-    }
-  end
-
-
-  def test_can_publish_action_to_users_feed
-    expect_http_posts_with_responses(example_publish_action_xml)
-    assert_nothing_raised {
-      assert(@session.user.publish_action((s = Facebooker::Feed::Action.new; s.title = 'o hai'; s.body = '4srsly'; s)))
-    }
-  end
-
-  def test_can_publish_templatized_action_to_users_feed
-    expect_http_posts_with_responses(example_publish_templatized_action_xml)
-    assert_nothing_raised {
-      action = Facebooker::Feed::TemplatizedAction.new
-      action.title_template = "{actor} did something"
-      assert(@session.user.publish_templatized_action(action))
-    }
-  end
-
-  def test_can_publish_templatized_action_to_users_feed_with_params_as_string
-    json_data="{\"move\": \"punch\"}"
-    action = Facebooker::Feed::TemplatizedAction.new
-    action.title_template = "{actor} did something "
-    action.title_data=json_data
-    assert_equal action.to_params[:title_data],json_data
-  end
-
-  def test_can_publish_templatized_action_to_users_feed_with_params_as_hash
-    json_data="{\"move\": \"punch\"}"
-    hash={:move=>"punch"}
-    hash.expects(:to_json).returns(json_data)
-    action = Facebooker::Feed::TemplatizedAction.new
-    action.title_template = "{actor} did something "
-    action.title_data=hash
-    assert_equal action.to_params[:title_data],json_data
-  end
-
   def test_can_deactivate_template_bundle_by_id
     expect_http_posts_with_responses(example_deactivate_template_bundle_by_id_xml)
     assert_equal true, @session.post('facebook.feed.deactivateTemplateBundleByID', :template_bundle_id => 123)
-  end
-
-  def test_can_get_notifications_for_logged_in_user
-    expect_http_posts_with_responses(example_notifications_get_xml)
-    assert_equal("1", @session.user.notifications.messages.unread)
-    assert_equal("0", @session.user.notifications.pokes.unread)
-    assert_equal("1", @session.user.notifications.shares.unread)
-  end
-
-  def test_can_send_notifications
-    expect_http_posts_with_responses(example_notifications_send_xml)
-    assert_nothing_raised {
-      user_ids = [123, 321]
-      notification_fbml = "O HAI!!!"
-      optional_email_fbml = "This would be in the email.  If this is not passed, facebook sends no mailz!"
-      assert_equal('http://www.facebook.com/send_email.php?from=211031&id=52', @session.send_notification(user_ids, notification_fbml, optional_email_fbml))
-    }
   end
 
   def test_can_send_emails
@@ -562,13 +509,6 @@ class TestFacebooker < Test::Unit::TestCase
     <<-XML
     <?xml version="1.0" encoding="UTF-8"?>
     <feed_publishStoryToUser_response xmlns="http://api.facebook.com/1.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://api.facebook.com/1.0/ http://api.facebook.com/1.0/facebook.xsd">1</feed_publishStoryToUser_response>
-    XML
-  end
-
-  def example_publish_action_xml
-    <<-XML
-    <?xml version="1.0" encoding="UTF-8"?>
-    <feed_publishActionOfUser_response xmlns="http://api.facebook.com/1.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://api.facebook.com/1.0/ http://api.facebook.com/1.0/facebook.xsd">1</feed_publishActionOfUser_response>
     XML
   end
 

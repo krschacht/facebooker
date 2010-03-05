@@ -1,3 +1,8 @@
+##
+# I think this is integral in converting the return values to native Ruby objects. This is the bad
+# part that should be removed.
+#
+
 require 'rexml/document'
 require 'facebooker/session'
 

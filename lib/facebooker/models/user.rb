@@ -277,18 +277,6 @@ module Facebooker
       @notifications ||= Notifications.from_hash(session.post('facebook.notifications.get'))
     end
 
-    def publish_story(story)
-      publish(story)
-    end
-
-    def publish_action(action)
-      publish(action)
-    end
-
-    def publish_templatized_action(action)
-      publish(action)
-    end
-
     def albums
       @albums ||= session.post('facebook.photos.getAlbums', :uid => self.id) do |response|
         response.map do |hash|
