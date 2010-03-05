@@ -370,30 +370,13 @@ module Facebooker
     end    
 
 
-    #
-    # Returns a proxy object for handling calls to Facebook cached items
-    # such as images and FBML ref handles
-    def server_cache
-      Facebooker::ServerCache.new(self)
-    end
 
-    #
-    # Returns a proxy object for handling calls to the Facebook Data API
-    def data
-      Facebooker::Data.new(self)
-    end
 
-    def admin
-      Facebooker::Admin.new(self)
+    def api
+      Facebooker::Api.new(self)
     end
     
-    def application
-      Facebooker::Application.new(self)
-    end
 
-    def mobile
-      Facebooker::Mobile.new(self)
-    end
 
     #
     # Given an array like:

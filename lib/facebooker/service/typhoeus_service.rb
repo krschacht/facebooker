@@ -13,5 +13,4 @@ class Facebooker::Service::TyphoeusService < Facebooker::Service::BaseService
     raise "Multipart not supported on Typhoeus"
   end
   
-  
 end

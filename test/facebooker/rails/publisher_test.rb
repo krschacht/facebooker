@@ -285,9 +285,9 @@ class Facebooker::Rails::Publisher::PublisherTest < Test::Unit::TestCase
 
   def test_deliver_ref_update
     Facebooker::Session.stubs(:create).returns(@session)
-    @server_cache="server_cache"
-    @session.expects(:server_cache).returns(@server_cache)
-    @server_cache.expects(:set_ref_handle).with("handle","fbml")
+    @fbml="fbml"
+    @session.expects(:fbml).returns(@fbml)
+    @fbml.expects(:set_ref_handle).with("handle","fbml")
     TestPublisher.deliver_ref_update(@user)
   end
 

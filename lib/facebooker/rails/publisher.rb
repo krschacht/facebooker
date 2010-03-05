@@ -416,7 +416,7 @@ module Facebooker
          @from = Facebooker::User.new(Facebooker::User.cast_to_facebook_id(@recipients.first),Facebooker::Session.create) 
          @from.set_profile_fbml(_body.profile, _body.mobile_profile, _body.profile_action, _body.profile_main)
         when Ref
-          Facebooker::Session.create.server_cache.set_ref_handle(_body.handle,_body.fbml)
+          Facebooker::Session.create.fbml.set_ref_handle(_body.handle,_body.fbml)
         when UserAction
           @from.session.publish_user_action(_body.template_id,_body.data_hash,_body.target_ids,_body.body_general,_body.story_size)
         when Facebooker::StreamPost
